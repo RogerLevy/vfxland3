@@ -1,10 +1,15 @@
-: ?load-sample  ( var zstr )
+: ?load-sample  ( var zstr - )
     dup 0= if 2drop exit then
     dup zcount FileExist? if
         over @ ?dup if al_destroy_sample then
         cr dup zcount type
         al_load_sample swap !
     else drop drop then
+;
+
+: just-play-sample ( var - )
+    @ dup 0= if  drop  exit  then  
+    1e 0e 1e  ALLEGRO_PLAYMODE_ONCE   here  al_play_sample
 ;
 
 : ?stream-sample ( loopmode var zstr - )
@@ -19,9 +24,9 @@
 ;
 
 : stop-audio-stream ( var - )
-  @ 0 al_set_audio_stream_playing drop
+    @ 0 al_set_audio_stream_playing drop
 ;
 
 : resume-audio-stream ( var - )
-  @ 1 al_set_audio_stream_playing drop
+    @ 1 al_set_audio_stream_playing drop
 ;

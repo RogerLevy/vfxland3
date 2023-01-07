@@ -9,10 +9,9 @@ include lib/vfxland3.f
 display al_flip_display
 
 cr .( Loading and playing a WAV sample... )
-0 value sid
 variable smp
 smp z" tests/data/link_haa.wav" ?load-sample
-smp @ 1e 0e 1e  ALLEGRO_PLAYMODE_ONCE   addr sid  al_play_sample
+smp just-play-sample
 1000 ms
 
 cr .( Streaming an OGG file... )
