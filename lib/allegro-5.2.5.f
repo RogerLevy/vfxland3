@@ -3199,7 +3199,7 @@ extern "C" void al_scale_transform( void * m, float sx, float sy );
 \ extern "C" al_set_audio_stream_gain( );
 \ extern "C" al_set_audio_stream_loop_secs( );
 \ extern "C" al_set_audio_stream_pan( );
-\ extern "C" al_set_audio_stream_playing( );
+extern "C" bool al_set_audio_stream_playing( void * stream, bool val );
 extern "C" int al_set_audio_stream_playmode( void * stream, int mode );
 \ extern "C" al_set_audio_stream_speed( );
 \ extern "C" al_set_blend_color( );
