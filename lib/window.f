@@ -1,0 +1,73 @@
+0 value display
+0 value mixer
+0 value voice
+create mi /ALLEGRO_MONITOR_INFO allot&erase
+0 value queue
+0 value builtin-font  \ builtin-font
+
+: -audio
+    mixer 0= if exit then
+    mixer 0 al_set_mixer_playing drop 
+;
+
+: +audio
+    mixer if  mixer 1 al_set_mixer_playing drop  exit then 
+    44100 ALLEGRO_AUDIO_DEPTH_INT16 ALLEGRO_CHANNEL_CONF_2 al_create_voice to voice
+    44100 ALLEGRO_AUDIO_DEPTH_FLOAT32 ALLEGRO_CHANNEL_CONF_2 al_create_mixer to mixer
+    mixer voice al_attach_mixer_to_voice 0= abort" Couldn't initialize audio"
+    mixer al_set_default_mixer drop
+    mixer 1 al_set_mixer_playing drop
+;
+
+: check  0= abort" Allegro init error" ;
+
+: init-allegro
+    ALLEGRO_VERSION 0 al_install_system check
+    
+    al_init_image_addon check
+    al_init_native_dialog_addon check
+    al_init_primitives_addon check
+    al_init_font_addon
+    al_init_ttf_addon check
+    al_init_acodec_addon check
+    al_install_audio 0= abort" Error installing audio."
+    al_install_haptic check
+    al_install_joystick check
+    al_install_mouse check
+    al_install_touch_input check
+    ALLEGRO_VSYNC 1 2 al_set_new_display_option
+    [undefined] doublebuf? [if]
+        \ gets us one less frame of input lag
+        ALLEGRO_SINGLE_BUFFER 1 2 al_set_new_display_option
+    [then]
+    
+    [ fullscreen? ] [if]
+        ALLEGRO_FULLSCREEN al_set_new_display_flags
+        winw winh al_create_display to display
+    [else]
+        winw winh al_create_display to display
+        display 0 0 al_set_window_position
+    [then]
+    0 to mixer  0 to voice
+    64 al_reserve_samples 0= abort" Allegro: Error reserving samples." 
+    +audio
+    al_create_event_queue to queue
+    queue  display       al_get_display_event_source  al_register_event_source
+    queue                al_get_mouse_event_source    al_register_event_source
+    al_create_builtin_font to builtin-font
+
+    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender
+;
+
+mswin? [if]
+    extern void * GetForegroundWindow( );
+    extern bool SetForegroundWindow( void * hwnd );
+    
+    GetForegroundWindow constant vfx-hwnd
+[then]
+
+init-allegro
+
+mswin? [if]
+    vfx-hwnd SetForegroundWindow
+[then]
