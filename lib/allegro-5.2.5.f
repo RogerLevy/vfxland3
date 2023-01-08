@@ -2677,7 +2677,7 @@ extern "C" void al_draw_filled_rectangle( float x1, float y1, float x2, float y2
 \ extern "C" al_draw_justified_text( );
 \ extern "C" al_draw_justified_textf( );
 \ extern "C" al_draw_justified_ustr( );
-\ extern "C" al_draw_line( );
+extern "C" al_draw_line( float x1, float y1, float x2, float y2, int color, float thickness );
 extern "C" void al_draw_multiline_text( void *font,
      float r, float g, float b, float a, float x, float y, float max_width, float line_height,
      int flags, void *text );
@@ -2688,7 +2688,7 @@ extern "C" void al_draw_multiline_text( void *font,
 \ extern "C" al_draw_polygon( );
 \ extern "C" al_draw_polyline( );
 \ extern "C" al_draw_prim( );
-\ extern "C" void al_draw_rectangle( float x1, float y1, float x2, float y2, float r, float g, float b, float a, float thickness );
+extern "C" void al_draw_rectangle( float x1, float y1, float x2, float y2, float r, float g, float b, float a, float thickness );
 \ extern "C" al_draw_ribbon( );
 \ extern "C" al_draw_rotated_bitmap( );
 \ extern "C" al_draw_rounded_rectangle( );
@@ -3178,7 +3178,7 @@ extern "C" void al_reset_clipping_rectangle( );
 \ extern "C" al_restore_state( );
 \ extern "C" al_resume_timer( );
 \ extern "C" al_rewind_audio_stream( );
-\ extern "C" al_rotate_transform( );
+extern "C" void al_rotate_transform( void * m, float theta );
 \ extern "C" al_rotate_transform_3d( );
 \ extern "C" al_rumble_haptic( );
 \ extern "C" al_run_detached_thread( );

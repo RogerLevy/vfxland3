@@ -1,0 +1,44 @@
+cwd ..
+cr 
+.( working directory:) pwd
+include config/options.f
+include lib/vfxland3.f
+
+0.5e 0.25e 0e 1e al_clear_to_color
+
+cr .( Loading and drawing a bitmap... )
+
+0 bitmap z" tests/data/inkajoo-drab-palette.png" ?load-bitmap
+50 50 at  0 blit
+
+cr .( Drawing a transformed bitmap... )
+
+identity  200e -10e  45e  8e 80e  transformed
+0 0 at  0 blit
+
+cr .( Loading and drawing some tile-sprites... )
+
+1 bitmap z" tests/data/lemming.png" ?load-bitmap
+1 0 16 16 tile 2 bitmap!
+1 36 16 16 tile 3 bitmap!
+1 210 16 16 tile 4 bitmap!
+
+identity  250e 100e  0e  4e 4e  transformed
+0 0 at 2 blit
+32 32 at 3 blit
+64 64 at 4 blit
+
+cr .( Loading and drawing some BG tiles... )
+
+5 bitmap z" tests/data/castle-tileset.png" ?load-bitmap
+5 0 16 16 tile 6 bitmap!
+5 58 16 16 tile 7 bitmap!
+5 64 16 16 tile 8 bitmap!
+
+identity  150e 360e  0e  3e 3e  transformed
+0 0 at 6 blit
+32 0 at 7 blit
+64 0 at 8 blit
+
+
+display al_flip_display

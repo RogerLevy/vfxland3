@@ -4,6 +4,7 @@
 create mi /ALLEGRO_MONITOR_INFO allot&erase
 0 value queue
 0 value builtin-font  \ builtin-font
+create m  16 cells allot  \ default matrix
 
 : -audio
     mixer 0= if exit then
@@ -57,6 +58,9 @@ create mi /ALLEGRO_MONITOR_INFO allot&erase
     al_create_builtin_font to builtin-font
 
     ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender
+    
+    m al_identity_transform
+    m al_use_transform
 ;
 
 mswin? [if]
