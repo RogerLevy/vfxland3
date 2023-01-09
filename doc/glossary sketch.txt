@@ -1,0 +1,86 @@
+held
+pressed
+released
+
+create-matrix
+
+create-pool
+allocate-slab
+free-slab
+
+%node
+node.first@ / !
+node.last@ / !
+node.next@ / !
+node.prev@ / !
+add-child
+unshift-child
+insert-child-before
+insert-child-after
+remove-node
+#children
+each-child
+
+define-kind
+end-kind
+extend-kind
+version
+field
+me
+as
+was
+kind.size
+kind.serializer
+kind.fields
+sizeof
+
+%node -> %object
+kind
+id
+x y
+w h
+flags
+'step
+'draw
+'event
+
+%object -> %stage
+camera
+
+%object -> %grid
+colw
+rowh
+#cols
+#rows
+
+%grid -> %tilemap
+tsb \ tileset bitmap#
+tmstride \ tilemap stride
+nt \ nametable (address to tile #'s, which are cells)
+
+obj
+state!
+flags!
+
+stage
+scene
+save
+saveto
+load
+copy
+shout
+
+recycle
+dismiss
+draw>
+act>
+react>
+
+
+
+
+Experimental basic collision module
+-----------------------------------
+
+overlap?
+inside?
