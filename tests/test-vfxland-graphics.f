@@ -8,7 +8,7 @@ include lib/vfxland3.f
 
 cr .( Loading and drawing a bitmap... )
 
-0 bitmap z" tests/data/inkajoo-drab-palette.png" ?load-bitmap
+0 bitmaps entry z" tests/data/inkajoo-drab-palette.png" ?load-bitmap
 50 50 at  0 blit
 
 cr .( Drawing a transformed bitmap... )
@@ -18,7 +18,7 @@ identity  200e -10e  45e  8e 80e  transformed
 
 cr .( Loading and drawing some tile-sprites... )
 
-1 bitmap z" tests/data/lemming.png" ?load-bitmap
+1 bitmaps entry z" tests/data/lemming.png" ?load-bitmap
 1 0 16 16 tile 2 bitmap!
 1 36 16 16 tile 3 bitmap!
 1 210 16 16 tile 4 bitmap!
@@ -30,7 +30,7 @@ identity  250e 100e  0e  4e 4e  transformed
 
 cr .( Loading and drawing some BG tiles... )
 
-5 bitmap z" tests/data/castle-tileset.png" ?load-bitmap
+5 bitmaps entry z" tests/data/castle-tileset.png" ?load-bitmap
 5 0 16 16 tile 6 bitmap!
 5 58 16 16 tile 7 bitmap!
 5 64 16 16 tile 8 bitmap!
