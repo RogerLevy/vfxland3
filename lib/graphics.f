@@ -4,6 +4,7 @@ create pen 0 , 0 ,
 : 2!  dup >r  cell+ ! r> ! ;
 : at  pen 2! ;
 : at@f  pen @+ s>f @ s>f ;
+: at@  pen @+ swap @ ;
 : +at  pen cell+ +!  pen +! ;
 
 : transformed ( f: x y angle sx sy - )
