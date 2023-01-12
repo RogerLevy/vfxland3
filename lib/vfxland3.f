@@ -6,3 +6,5 @@ include lib/narray.f
 include lib/graphics.f
 include lib/bitmaps.f
 include lib/vectors.f
+include lib/input.f
+include lib/keys.f

@@ -5,11 +5,15 @@ create mi /ALLEGRO_MONITOR_INFO allot&erase
 0 value queue
 0 value builtin-font  \ builtin-font
 create m  16 cells allot  \ default matrix
+  m al_identity_transform
+create kbs0 /ALLEGRO_KEYBOARD_STATE allot&erase
+create kbs1 /ALLEGRO_KEYBOARD_STATE allot&erase
+create ms0 /ALLEGRO_MOUSE_STATE allot&erase
+create ms1 /ALLEGRO_MOUSE_STATE allot&erase
 
 : -audio
     mixer 0= if exit then
-    mixer 0 al_set_mixer_playing drop 
-;
+    mixer 0 al_set_mixer_playing drop ;
 
 : +audio
     mixer if  mixer 1 al_set_mixer_playing drop  exit then 
@@ -17,8 +21,7 @@ create m  16 cells allot  \ default matrix
     44100 ALLEGRO_AUDIO_DEPTH_FLOAT32 ALLEGRO_CHANNEL_CONF_2 al_create_mixer to mixer
     mixer voice al_attach_mixer_to_voice 0= abort" Couldn't initialize audio"
     mixer al_set_default_mixer drop
-    mixer 1 al_set_mixer_playing drop
-;
+    mixer 1 al_set_mixer_playing drop ;
 
 : check  0= abort" Allegro init error" ;
 
@@ -49,19 +52,31 @@ create m  16 cells allot  \ default matrix
         winw winh al_create_display to display
         display 0 0 al_set_window_position
     [then]
+    
     0 to mixer  0 to voice
     64 al_reserve_samples 0= abort" Allegro: Error reserving samples." 
     +audio
+    
     al_create_event_queue to queue
     queue  display       al_get_display_event_source  al_register_event_source
     queue                al_get_mouse_event_source    al_register_event_source
     al_create_builtin_font to builtin-font
 
-    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender
-    
-    m al_identity_transform
-    m al_use_transform
-;
+    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender ;
+
+: reset-keyboard
+    kbs0 /ALLEGRO_KEYBOARD_STATE erase
+    kbs1 /ALLEGRO_KEYBOARD_STATE erase
+    al_uninstall_keyboard  al_install_keyboard drop
+    queue al_get_keyboard_event_source al_register_event_source ;
+
+: poll-keyboard
+    kbs0 kbs1 /ALLEGRO_KEYBOARD_STATE move
+    kbs0 al_get_keyboard_state ;
+
+: poll-mouse
+    ms0 ms1 /ALLEGRO_MOUSE_STATE move
+    ms0 al_get_mouse_state ;
 
 mswin? [if]
     extern void * GetForegroundWindow( );

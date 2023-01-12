@@ -2751,7 +2751,7 @@ extern "C" void al_draw_tinted_scaled_rotated_bitmap_region(
 \ extern "C" al_fixtoi( );
 \ extern "C" al_fixtorad_r( );
 extern "C" void al_flip_display( void * display );
-\ extern "C" al_flush_event_queue( );
+extern "C" void al_flush_event_queue( void * queue );
 \ extern "C" al_fopen( );
 \ extern "C" al_fopen_fd( );
 \ extern "C" al_fopen_interface( );
@@ -3779,7 +3779,6 @@ $71 constant ALLEGRO_CHANNEL_CONF_7_1
 53 constant  ALLEGRO_EVENT_TOUCH_CANCEL
 60 constant  ALLEGRO_EVENT_DISPLAY_CONNECTED
 61 constant  ALLEGRO_EVENT_DISPLAY_DISCONNECTED
-
 
 struct /ALLEGRO_EVENT
     field: ALLEGRO_EVENT.type
