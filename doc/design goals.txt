@@ -1,0 +1,13 @@
+- Not worrying about 64-bit, or porting to other systems
+- Modules will be as decoupled as possible
+    - Non-awareness of "class" definition
+    - Non-awareness of instantiation where possible
+    - Dependencies are managed by loading modules
+- As few core extensions as possible.  Where they're required, keep local.
+- As little dynamic instantiation as possible.
+- A focus on workflow, tools (special tailoring for a specific game)
+- Work on serialization, use game functionality to create tools
+- Ultimately, standalone tools, standardization of data formats, an IDE (OS-like)
+    - Tools and tool-making bits that can take advantage of the subsystem
+- Simplicity over performance, deferring optimization
+- Make a game in a branch and then standardize stuff
