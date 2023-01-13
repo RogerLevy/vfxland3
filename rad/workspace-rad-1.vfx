@@ -1,8 +1,6 @@
 \ Workspace test #1
 
 cwd ..
-\ include config/options.f
-\ include lib/vfxland3.f
 
 variable penx
 variable peny
@@ -46,12 +44,6 @@ create %object , 0 ,
     
 : object  ( n - obj )
     me >r  here [[  allot&erase  r> link-after  me ]] ;
-
-: init-app  ( kind app - )
-    [[ kind ! ]] ;
-    
-\ : app  ( - <name> app )
-\     create  workspace [[ dup sizeof object dup init-app ]] ;
 
 variable (in)
 : ?kind ( - kind )

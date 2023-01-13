@@ -1,8 +1,8 @@
 cwd ..
 cr 
 .( working directory:) pwd
-include config/options.f
-include lib/vfxland3.f
+include config/options.vfx
+include lib/vl3/vfxland3.vfx
 
 0.5e 0.25e 0e 1e al_clear_to_color
 

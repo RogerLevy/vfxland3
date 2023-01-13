@@ -1,8 +1,8 @@
 cwd ..
 cr 
 .( working directory:) pwd
-include config/options.f
-include lib/vfxland3.f
+include config/options.vfx
+include lib/vl3/vfxland3.vfx
 
 cr .( Loading and playing a WAV sample... )
 variable smp

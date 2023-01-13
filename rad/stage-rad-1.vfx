@@ -1,8 +1,8 @@
 \ experimental stage
 
 cwd ..
-include config/options.f
-include lib/vfxland3.f
+include config/options.vfx
+include lib/vl3/vfxland3.vfx
 
 create world 0 , 
 world value me
@@ -85,7 +85,7 @@ objvar tm-tw  \ scalar
 objvar tm-th  \ scalar
 create %tilemap ,
 
-include lib/tilemap.f
+include lib/vl3/tilemap.vfx
 
 : hv,  $03000000 or , ;
 

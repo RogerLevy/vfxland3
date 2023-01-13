@@ -1,0 +1,10 @@
+include config/allegro.vfx
+include lib/al/window.vfx
+include lib/al/tools.vfx
+include lib/vl3/constants.vfx
+include lib/narray.vfx
+include lib/al/graphics.vfx
+include lib/vl3/bitmaps.vfx
+include lib/vectors.vfx
+include lib/vl3/input.vfx
+include lib/al/keys.vfx
