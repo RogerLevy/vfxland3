@@ -36,7 +36,7 @@ create m  16 cells allot  \ default matrix
     al_install_joystick check
     al_install_mouse check
     al_install_touch_input check
-    ALLEGRO_VSYNC 1 2 al_set_new_display_option
+    ALLEGRO_VSYNC  1  ALLEGRO_SUGGEST  al_set_new_display_option
     [undefined] doublebuf? [if]
         \ gets us one less frame of input lag
         ALLEGRO_SINGLE_BUFFER 1 2 al_set_new_display_option
