@@ -1,3 +1,9 @@
+- Natural language coding style
+- Individual module versions
+- Do things as simply as possible
+- Plugin paradigm to avoid premature abstraction
+- Use VFX's special features extensively, particularly "OS" stuff and modules
+
 - Not worrying about 64-bit, or porting to other systems
 - Modules will be as decoupled as possible
     - Non-awareness of "class" definition

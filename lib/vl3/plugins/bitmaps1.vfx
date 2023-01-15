@@ -1,11 +1,14 @@
 max-bitmaps cell narray bitmaps
 
+: bitmap
+    bitmaps entry ;
+
 : bitmap@ ( n - bitmap )
-    bitmaps entry @ ;
+    bitmap @ ;
 
 : bitmap! ( bitmap n - )
     dup bitmap@ ?dup if  al_destroy_bitmap  then
-    bitmaps entry ! ;
+    bitmap ! ;
 
 : mblit  ( m n - )
     bitmap@ dup if

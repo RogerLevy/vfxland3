@@ -1,0 +1,67 @@
+create world 0 , 
+world value me
+create os  $100 allot
+variable >os 
+
+: [[  me >os @ os + !  >os @ cell+ $ff and >os !  to me ;
+: ]]  >os @ cell- $ff and >os !  >os @ os + @ to me ;
+: objvar  create dup , cell+  does> @ me + ;
+
+
+0
+objvar lnk
+objvar kind
+objvar en
+objvar flags
+objvar x
+objvar y
+objvar w
+objvar h
+objvar 'step
+objvar 'draw
+objvar 'react
+create %object ,
+
+: sizeof  @ ;
+
+: ?execute  ?dup if execute then ;
+
+: link-after  ?dup 0= if exit then  me swap [[ lnk ! ]] ;
+    
+: object  ( n - obj )
+    me >r  here [[  allot&erase  r> link-after  me ]] ;
+
+: pool ( n size - obj )
+    here -rot  0 [[  swap 0 do  dup object to me  loop  ]]  drop ;
+
+: create-pool  create pool  drop ;
+
+: one  ( kind obj - obj )
+    [[ begin
+        en @ 0= if  en on  kind !  me ]] exit then
+    lnk @ dup to me 0= until ]] nip ;
+
+0 value xt
+: each  ( obj xt - )  ( - continue? )
+    xt >r  to xt  [[  
+        begin  me  while
+            xt execute 0= if  leave  then
+            lnk @ to me
+        repeat
+    ]]  r> to xt ;
+
+: each>  r> each ;
+
+: draw>  r> 'draw ! ;
+: step>  r> 'step ! ;
+: react>  r> 'react ! ;
+
+: bytes ;
+
+100 256 bytes create-pool p
+
+: 2!  dup >r cell+ ! r> ! ;
+: 2@  @+ swap @ ;
+
+: rnd  choose ;
+
