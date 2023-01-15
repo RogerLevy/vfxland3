@@ -1,0 +1,33 @@
+: mblit  ( m bmp - )
+    ?dup 0= if drop exit then  at@f swap al_draw_bitmap ;
+
+: blit  ( bmp - )
+    0 swap mblit ;
+
+: bmpw  ( bmp - n )  al_get_bitmap_width ;
+: bmph  ( bmp - n )  al_get_bitmap_height ;
+: bmpwh  ( bmp - w h )  dup bmpw swap bmph ; 
+: loadbmp  ( zstr - )  al_load_bitmap ;    
+
+: (tile)  ( n bw tw th - x y tw th )
+    locals| th tw bw n |
+    n bw tw / mod tw *
+    n bw tw / / th *
+    tw th ;
+
+: >tile  ( bmp n tw th - bitmap )
+    locals| th tw n bmp |
+    bmp n over bmpw tw th (tile) al_create_sub_bitmap ;
+
+: >tiles,  ( bmp tw th - )
+    locals| th tw bmp |
+    0  bmp bmph th / 0 do
+        bmp bmpw tw / 0 do
+            bmp over tw th >tile ,
+            1 +
+        loop
+    loop  drop ;
+    
+: tile  ( n a - )
+    over 0< if 2drop exit then
+    swap dup 28 rshift -rot $0fffffff and cells + @ mblit ;
