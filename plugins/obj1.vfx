@@ -6,6 +6,7 @@ variable >os
 : [[  me >os @ os + !  >os @ cell+ $ff and >os !  to me ;
 : ]]  >os @ cell- $ff and >os !  >os @ os + @ to me ;
 : objvar  create dup , cell+  does> @ me + ;
+: as  to me ;
 
 
 0
@@ -28,22 +29,27 @@ create %object ,
 
 : link-after  ?dup 0= if exit then  me swap [[ lnk ! ]] ;
     
-: object  ( n - obj )
-    me >r  here [[  allot&erase  r> link-after  me ]] ;
+: object  ( n - me=obj )
+    me >r  here as  allot&erase  r> link-after ;
 
-: pool ( n size - obj )
-    here -rot  0 [[  swap 0 do  dup object to me  loop  ]]  drop ;
+create %pool %object sizeof ,
 
-: create-pool  create pool  drop ;
+: pool ( n size - me=pool )
+    0 as  %pool object  me [[
+    here -rot  swap 0 ?do  dup object to me  loop  
+    drop  ]] ;
 
-: one  ( kind obj - obj )
-    [[ begin
-        en @ 0= if  en on  kind !  me ]] exit then
-    lnk @ dup to me 0= until ]] nip ;
+: one  ( kind - me=obj )
+    lnk @ as  begin
+        en @ 0= if  en on  kind !  exit then
+    lnk @ dup to me 0= until
+    nip  -1 abort" Out of dynamic objects" ;
+
+: >first  [[ lnk @ ]] ;
 
 0 value xt
-: each  ( obj xt - )  ( - continue? )
-    xt >r  to xt  [[  
+: each  ( pool xt - )  ( - continue? )
+    xt >r  to xt  >first [[  
         begin  me  while
             xt execute 0= if  leave  then
             lnk @ to me
@@ -55,3 +61,6 @@ create %object ,
 : draw>  r> 'draw ! ;
 : step>  r> 'step ! ;
 : react>  r> 'react ! ;
+
+: static  ( kind - me=obj )
+    dup sizeof object kind ! ;
