@@ -55,13 +55,3 @@ create %object ,
 : draw>  r> 'draw ! ;
 : step>  r> 'step ! ;
 : react>  r> 'react ! ;
-
-: bytes ;
-
-100 256 bytes create-pool p
-
-: 2!  dup >r cell+ ! r> ! ;
-: 2@  @+ swap @ ;
-
-: rnd  choose ;
-
