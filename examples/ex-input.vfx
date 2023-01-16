@@ -2,7 +2,7 @@ cwd ..
 include config/options.vfx
 include config/allegro.vfx
 include lib/vl3/vfxland3.vfx
-include lib/vl3/plugins/bitmaps1.vfx
+include plugins/bitmaps1.vfx
 
 -sin  \ disable tokenization of all definitions from here
 
@@ -11,11 +11,11 @@ variable x
 variable y
 
 : move-about
-    <up> held if -1 y +! then
-    <down> held if 1 y +! then
-    <left> held if -1 x +! then
-    <right> held if 1 x +! then
-    <enter> pressed if 10 x +! then
+    <up> held? if -1 y +! then
+    <down> held? if 1 y +! then
+    <left> held? if -1 x +! then
+    <right> held? if 1 x +! then
+    <enter> pressed? if 10 x +! then
     walt y +! x +! ;
 
 100 bitmap z" data/lemming.png" ?load-bitmap
