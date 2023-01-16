@@ -1,5 +1,4 @@
-create world 0 , 
-world value me
+0 value me
 create os  $100 allot
 variable >os 
 
@@ -10,20 +9,20 @@ variable >os
 
 
 0
-objvar lnk
-objvar kind
-objvar en
-objvar flags
-objvar x
-objvar y
-objvar w
-objvar h
-objvar vx
-objvar vy
-objvar 'step
-objvar 'draw
-objvar 'react
-objvar 'motion
+    objvar lnk
+    objvar kind
+    objvar en
+    objvar flags
+    objvar x
+    objvar y
+    objvar w
+    objvar h
+    objvar vx
+    objvar vy
+    objvar 'step
+    objvar 'draw
+    objvar 'react
+    objvar 'motion
 create %object , 0 ,
 
 : sizeof  @ ;
