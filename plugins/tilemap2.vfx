@@ -1,4 +1,4 @@
-require %idir%/obj1.vfx
+require plugins/obj1.vfx
 
 \ objvar tm-cols  \ scalar
 \ objvar tm-rows  \ scalar
