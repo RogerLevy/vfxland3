@@ -20,7 +20,7 @@
 : fv!  dup 4 + fs! fs! ;
 : fv+!  dup 4 + fs+! fs+! ;
 : fv*!  dup 4 + fs*! fs*! ;
-: fv,  dup fswap fs, fs, ;
+: fv,  fswap fs, fs, ;
 
 : v.  fv@ fswap f. f. ;
 
