@@ -1,3 +1,4 @@
+$10000 constant max-bitmaps
 max-bitmaps cell narray bitmaps
 
 : bitmap

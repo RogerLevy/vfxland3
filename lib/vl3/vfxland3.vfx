@@ -1,6 +1,5 @@
 include lib/al/window.vfx
 include lib/al/tools.vfx
-include lib/vl3/constants.vfx
 include lib/narray.vfx
 include lib/al/graphics.vfx
 include lib/vectors.vfx
