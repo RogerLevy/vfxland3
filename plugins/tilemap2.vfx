@@ -43,7 +43,7 @@ require %idir%/obj1.vfx
 
 : (draw-tilemap)  draw> the-tilemap ;
 
-: /tilemap  ( a:src a:ts w h - )
+: /tilemap  ( a:base a:ts w h - )
     tm-cols v!  tm-ts !  tm-base !
     tm-ts @ @ bmpwh tm-tw v!
     winw tm-tw s@ /  tm-cols s@ min
@@ -52,3 +52,6 @@ require %idir%/obj1.vfx
     tm-cols s@ cells tm-stride !
     0 0 tm-scrollx v!
     (draw-tilemap) ;
+    
+: tileloc  ( col row tilemap - a )
+    [[ tm-stride @ * tm-base @ + swap cells + ]] ;
