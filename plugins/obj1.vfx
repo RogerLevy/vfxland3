@@ -24,9 +24,10 @@ objvar 'step
 objvar 'draw
 objvar 'react
 objvar 'motion
-create %object ,
+create %object , 0 ,
 
 : sizeof  @ ;
+: kind.init  cell+ ;
 
 : ?execute  ?dup if execute then ;
 
@@ -66,5 +67,10 @@ create %pool %object sizeof ,
 : react>  r> 'react ! ;
 : motion>  r> 'motion ! ;
 
+: extend  sizeof ;
+
+: init  ( - )
+    kind @ kind.init @ ?execute ;
+
 : static  ( kind - me=obj )
-    dup sizeof object kind ! ;
+    dup sizeof object kind ! init ;
