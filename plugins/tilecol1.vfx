@@ -66,8 +66,8 @@ module collisioning
     : cl  mbh gap f/ f>s 2 + 0 do  f2dup pt wrt? if pr unloop exit then he+  loop f2drop ;
     : crt mbh gap f/ f>s 2 + 0 do  f2dup pt wlt? if pl unloop exit then he+  loop f2drop ;
 
-    : ud  vy s@ if  vy s@ 0< if  px ny cu  else  px ny mbh f+ cd  then then ;
-    : lr  vx s@ if  vx s@ 0< if  nx ny cl  else  nx mbw f+ ny crt  then then ;
+    : ud  vy fs@ f0<> if  vy fs@ f0< if  px ny cu  else  px ny mbh f+ cd  then then ;
+    : lr  vx fs@ f0<> if  vx fs@ f0< if  nx ny cl  else  nx mbw f+ ny crt  then then ;
 
     : init  ( - )
         px vx fs@ f+ to nx  py vy fs@ f+ to ny 
