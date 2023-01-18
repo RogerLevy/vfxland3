@@ -61,6 +61,9 @@ create %pool %object sizeof ,
 
 : each>  r> each ;
 
+: vacate  ( pool - )
+    each> en off -1 ;
+
 : draw>  r> 'draw ! ;
 : step>  r> 'step ! ;
 : react>  r> 'react ! ;
