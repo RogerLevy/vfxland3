@@ -21,8 +21,8 @@ variable >os
     objvar vy
     objvar 'step
     objvar 'draw
-    objvar 'react
     objvar 'motion
+\    objvar 'react
 create %object , 0 ,  \ second cell is init; maybe only for compile time stuff?
 
 : sizeof  @ ;
@@ -36,32 +36,37 @@ create %object , 0 ,  \ second cell is init; maybe only for compile time stuff?
 : object  ( n - me=obj )
     me   here as  swap allot&erase  link-after ;
 
-%object extend  create %pool ,
+%object extend  create %pool , 0 ,
 
 : independent  0 as ;
 
-: /child
-    me locals| p |
-    independent %object sizeof object  \ dummy object, sole purpose is to be an anchor
-    me p [[ child ! ]] ;
+: /child  \ dummy object, sole purpose is to be an anchor
+    me 
+    independent %object sizeof object  
+    me swap [[ child ! ]] ;
+
+: init  ( - )
+    kind @ kind.init @ ?execute ;
+
+: static  ( kind - me=obj )
+    dup sizeof object kind !  en on  init ;
 
 : pool ( n size - me=pool )
-    %pool sizeof object  me locals| p |
+    dup 2 < if -1 abort" Cannot define a pool of less than 2." then
+    %pool static  me [[
     /child
     swap 0 ?do  dup object  loop  
     drop
-    p as ;
+    ]] ;
 
-\ this doesn't seem great
-: ?child  child @ ?dup 0= if me [[ /child me ]] then ;
-: children  ?child [[ ;
+: @child  child @ ?dup 0= if me [[ /child me ]] then ;
+: children  @child [[ ;
 : end-children  ]] ;  
-
 : >next  [[ lnk @ ]] ;
-: >first  [[ child @ ]] >next ;
+: >first  [[ child @ ]] dup if >next then ;
 
 : one  ( kind pool - obj )
-    me [[ >first as
+    >first [[
     begin  me  while 
         en @ 0= if  kind !  en on  me ]] exit then
         lnk @ to me
@@ -69,28 +74,23 @@ create %object , 0 ,  \ second cell is init; maybe only for compile time stuff?
     -1 abort" Out of objects in pool" ;
 
 0 value xt
-: each  ( pool xt - )  ( - continue? )
-    xt >r  to xt  >first [[  
+: each  ( xt pool - )  ( ... - continue? ... )
+    >first ?dup 0= if drop exit then
+    [[  xt >r  to xt    
         begin  me  while
             xt execute 0= if  leave  then
             lnk @ to me
         repeat
     ]]  r> to xt ;
 
-: each>  r> each ;
+: each>  r> swap each ;
 
-: vacate  ( pool - )
-    each> en off -1 ;
+: vacate  ( pool - )  each> en off -1 ;  DoNotsin
 
-: draw>  r> 'draw ! ;
-: step>  r> 'step ! ;
-: react>  r> 'react ! ;
-: motion>  r> 'motion ! ;
+: draw>  r> 'draw ! ;     DoNotSin
+: step>  r> 'step ! ;     DoNotSin
+: motion>  r> 'motion ! ; DoNotSin
 
-: init  ( - )
-    kind @ kind.init @ ?execute ;
-
-: static  ( kind - me=obj )
-    dup sizeof object kind ! init ;
-
-
+: draw    x v@ at  'draw @ ?execute   me each>  en @ if  recurse  then  -1 ;  DoNotSin
+: step    'step @ ?execute   me each>  en @ if  recurse  then  -1 ;  DoNotSin
+: motion  'motion @ ?execute me each>  en @ if  recurse  then  -1 ;  DoNotSin
