@@ -7,6 +7,9 @@ variable >os
 : objvar  create dup , cell+  does> @ me + ;
 : as  to me ;
 
+: create-kind  ( n - <name> )
+    create , 0 , 0 , ;
+
 0
     objvar lnk
     objvar kind
@@ -23,10 +26,11 @@ variable >os
     objvar 'draw
     objvar 'motion
 \    objvar 'react
-create %object , 0 ,  \ second cell is init; maybe only for compile time stuff?
+create-kind %object
 
 : sizeof  @ ;
-: kind.init  cell+ ;
+: kind.init  cell+ ;   \ maybe only for compile-time stuff ...
+: kind.serialize  cell+ cell+ ;
 : extend  sizeof ;
 
 : ?execute  ?dup if execute then ;
