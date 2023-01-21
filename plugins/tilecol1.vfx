@@ -1,5 +1,8 @@
 ( Simple tilemap collision )
 
+require plugins/obj1.vfx
+require plugins/delta.vfx
+
 ( what sides the object collided )
 0 value lwall?
 0 value rwall?
@@ -43,8 +46,8 @@ module collisioning
     : ve+  fswap  gap f+  px mbw f+ 1e f-  fmin  fswap ;
     : he+  gap f+  mbh ny f+ 1e f-  fmin ;
 
-    : +vy  +to ny  ny py f- vy fs! ;
-    : +vx  +to nx  nx px f- vx fs! ;
+    : +vy  +to ny  ny py f- delta f/ vy fs! ;
+    : +vx  +to nx  nx px f- delta f/ vx fs! ;
 
     ( push up/down )
     : pu ( f:xy ) fnip gap fmod fnegate +vy
@@ -70,7 +73,7 @@ module collisioning
     : lr  vx fs@ f0<> if  vx fs@ f0< if  nx ny cl  else  nx mbw f+ ny crt  then then ;
 
     : init  ( - )
-        px vx fs@ f+ to nx  py vy fs@ f+ to ny 
+        px vx fs@ delta f* f+ to nx  py vy fs@ delta f* f+ to ny 
         0 to lwall?  0 to rwall?  0 to floor?  0 to ceiling?
         map [[ tm-tw fs@ to gap ]] ;
 
