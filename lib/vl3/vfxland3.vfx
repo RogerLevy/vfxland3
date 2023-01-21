@@ -5,3 +5,4 @@ include lib/al/graphics.vfx
 include lib/vectors.vfx
 include lib/vl3/input.vfx
 include lib/al/keys.vfx
+include lib/counter.vfx
