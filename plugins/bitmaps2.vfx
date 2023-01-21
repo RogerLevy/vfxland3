@@ -9,24 +9,24 @@
 : bmpwh  ( bmp - w h )  dup bmpw swap bmph ; 
 : loadbmp  ( zstr - )  al_load_bitmap ;    
 
-: (tile)  ( n bw tw th - x y tw th )
+: tilexy  ( n bw tw th - x y )
     locals| th tw bw n |
     n bw tw / mod tw *
-    n bw tw / / th *
-    tw th ;
+    n bw tw / / th * ;
 
-: >tile  ( bmp n tw th - bitmap )
-    locals| th tw n bmp |
-    bmp n over bmpw tw th (tile) al_create_sub_bitmap ;
+: subbmp  ( bmp w h - bmp )
+    2>r at@ 2r@ al_create_sub_bitmap 2r> drop 0 +at ;
 
-: >tiles,  ( bmp tw th - )
+: tileset  ( bmp tw th - )
     locals| th tw bmp |
-    0  bmp bmph th / 0 do
+    0 0 at
+    bmp bmph th / 0 do
+        at@
         bmp bmpw tw / 0 do
-            bmp over tw th >tile ,
-            1 +
+            bmp tw th subbmp ,
         loop
-    loop  drop ;
+        th + at
+    loop ;
     
 : tile  ( n a - )
     over 0< if 2drop exit then

@@ -22,7 +22,7 @@ cr .( Loading and drawing some tile-sprites... )
 
 z" data/lemming.png" loadbmp constant lemming.bmp
 
-create lem.ts  lemming.bmp 16 16 >tiles,
+create lem.ts  lemming.bmp 16 16 tileset
 
 identity  250e 100e  0e  4e 4e  transformed
 0 0 at 0 lem.ts tile
@@ -33,7 +33,7 @@ cr .( Loading and drawing some BG tiles... )
 
 z" data/castle-tileset.png" loadbmp constant castle.bmp
 
-create castle.ts  castle.bmp 16 16 >tiles,
+create castle.ts  castle.bmp 16 16 tileset
 
 identity  150e 360e  0e  3e 3e  transformed
 0 0 at 0 castle.ts tile
