@@ -1,19 +1,25 @@
 - Natural language coding style
-- Individual module versions
-- Do things as simply as possible
-- Plugin paradigm to avoid premature abstraction
-- Use VFX's special features extensively, particularly "OS" stuff and modules
-
-- Not worrying about 64-bit, or porting to other systems
-- Modules will be as decoupled as possible
-    - Non-awareness of "class" definition
-    - Non-awareness of instantiation where possible
-    - Dependencies are managed by loading modules
-- As few core extensions as possible.  Where they're required, keep local.
-- As little dynamic instantiation as possible.
+- Flatter, more minimal design that depends more on programmer knowledge
+  to put things together.
+- The concepts implemented should be powerful and easy to understand
 - A focus on workflow, tools (special tailoring for a specific game)
 - Work on serialization, use game functionality to create tools
 - Ultimately, standalone tools, standardization of data formats, an IDE (OS-like)
     - Tools and tool-making bits that can take advantage of the subsystem
+- Take full advantage of the Forth framework; where it can help, look into
+    enhancing it at the lowest levels (such as in the dictionary and interpreter)
+
+
+
+Implementation guidelines
+- Individual module versions
+- Static memory preferred over dynamic memory
+- Use VFX's special features extensively, particularly "OS" stuff and modules
+- Don't worry about 64-bit, or porting to other systems
+- Plugin paradigm to avoid premature abstraction
+- Modules will be as decoupled as possible
+    - Non-awareness of "class" definitions - to be provided by user code
+    - Non-awareness of instantiation where possible
+    - Dependencies are managed by user code, with the exception of plugin dependencies
+- No core extensions for the time being.  Keep one-off words local.
 - Simplicity over performance, deferring optimization
-- Make a game in a branch and then standardize stuff
