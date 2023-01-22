@@ -1,5 +1,4 @@
-
-0e fvalue delta
+1e fvalue delta
 0 0 2value lastTime
 16.66666666e 10000e f* fvalue fus
 : !delta  ( - )
