@@ -25,6 +25,12 @@ create ms1 /ALLEGRO_MOUSE_STATE allot&erase
 
 : check  0= abort" Allegro init error" ;
 
+: reset-keyboard
+    kbs0 /ALLEGRO_KEYBOARD_STATE erase
+    kbs1 /ALLEGRO_KEYBOARD_STATE erase
+    al_uninstall_keyboard  al_install_keyboard drop
+    queue al_get_keyboard_event_source al_register_event_source ;
+
 : init-allegro
     ALLEGRO_VERSION 0 al_install_system check
     
@@ -40,8 +46,9 @@ create ms1 /ALLEGRO_MOUSE_STATE allot&erase
     al_install_mouse check
     al_install_touch_input check
     ALLEGRO_VSYNC  1  ALLEGRO_SUGGEST  al_set_new_display_option
-    [undefined] doublebuf? [if]
+    [ doublebuf? dev? or ] [if]
         \ gets us one less frame of input lag
+        \ and in development keeps the framebuffer always presented
         ALLEGRO_SINGLE_BUFFER 1 2 al_set_new_display_option
     [then]
     
@@ -62,13 +69,9 @@ create ms1 /ALLEGRO_MOUSE_STATE allot&erase
     queue                al_get_mouse_event_source    al_register_event_source
     al_create_builtin_font to builtin-font
 
-    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender ;
-
-: reset-keyboard
-    kbs0 /ALLEGRO_KEYBOARD_STATE erase
-    kbs1 /ALLEGRO_KEYBOARD_STATE erase
-    al_uninstall_keyboard  al_install_keyboard drop
-    queue al_get_keyboard_event_source al_register_event_source ;
+    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender
+    
+    reset-keyboard ;
 
 : poll-keyboard
     kbs0 kbs1 /ALLEGRO_KEYBOARD_STATE move
