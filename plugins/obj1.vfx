@@ -4,28 +4,28 @@ variable >os
 
 : [[  me >os @ os + !  >os @ cell+ $ff and >os !  to me ;
 : ]]  >os @ cell- $ff and >os !  >os @ os + @ to me ;
-: objvar  create dup , cell+  does> @ me + ;
+: var  create dup , cell+  does> @ me + ;
 : as  to me ;
 
 : create-kind  ( n - <name> )
     create , 0 , 0 , ;
 
 0
-    objvar lnk
-    objvar kind
-    objvar en
-    objvar flags
-    objvar child
-    objvar x
-    objvar y
-    objvar w
-    objvar h
-    objvar vx
-    objvar vy
-    objvar 'step
-    objvar 'draw
-    objvar 'motion
-\    objvar 'react
+    var lnk
+    var kind
+    var en
+    var flags
+    var child
+    var x
+    var y
+    var w
+    var h
+    var vx
+    var vy
+    var 'step
+    var 'draw
+    var 'motion
+\    var 'react
 create-kind %object
 
 : sizeof  @ ;

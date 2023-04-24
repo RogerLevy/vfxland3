@@ -1,16 +1,16 @@
 require plugins/obj1.vfx
 
-\ objvar tm-cols  \ scalar
-\ objvar tm-rows  \ scalar
-\ objvar tm-dcols  \ scalar
-\ objvar tm-drows  \ scalar
-\ objvar tm-base  \ addr
-\ objvar tm-stride
-\ objvar tm-scrollx  \ scalar
-\ objvar tm-scrolly  \ scalar
-\ objvar tm-tw  \ scalar
-\ objvar tm-th  \ scalar
-\ objvar tm-ts
+\ var tm-cols  \ scalar
+\ var tm-rows  \ scalar
+\ var tm-dcols  \ scalar
+\ var tm-drows  \ scalar
+\ var tm-base  \ addr
+\ var tm-stride
+\ var tm-scrollx  \ scalar
+\ var tm-scrolly  \ scalar
+\ var tm-tw  \ scalar
+\ var tm-th  \ scalar
+\ var tm-ts
 
 0 value dx
 0 value dy
