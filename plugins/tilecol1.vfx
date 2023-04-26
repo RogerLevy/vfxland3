@@ -1,6 +1,5 @@
 ( Simple tilemap collision )
 
-require plugins/obj1.vfx
 require plugins/delta.vfx
 
 ( what sides the object collided )

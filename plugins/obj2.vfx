@@ -1,0 +1,227 @@
+create os  $100 allot
+variable >os 
+: >o  >os @ $ff and os + !  4 >os +! ;
+: o>  -4 >os +!  >os @ $ff and os + @ ;
+
+\ ------------------------------------------------------------------------------
+
+: field  create over , +  does> @ + ;
+
+\ ------------------------------------------------------------------------------
+
+0 value me
+0 value /kind
+: var  dup @ cell field over !  does> @ me + ;
+: as  to me ;
+: [[  me >o  as ;  DoNotSin
+: ]]  o> as ;  DoNotSin
+: kind  me ;
+: ?execute  ?dup 0= abort" Unimplemented method!" execute ;
+: ?have  >in @  have abort" Method already defined!" >in ! ;
+: method  ?have /kind cell field to /kind does> @ kind @ + @ ?execute ;
+: metafield  /kind swap field to /kind does> @ + ;
+: kind:  create  here dup >r  1024 move 1024 allot  r> ;
+: ;kind  drop ;
+: m:  ( kind -- <method> <code> ; )  ' >body @ + :noname swap ! ;
+: sizeof  @ ;
+: ?literal  state @ if postpone literal then ;
+: ->  ' >body @ ?literal s" +" evaluate ; immediate
+
+\ ------------------------------------------------------------------------------
+
+cell metafield (size)
+create %obj  4 , 1020 allot&erase
+
+\ ------------------------------------------------------------------------------
+
+method (remove) ( -- )
+method (push) ( list -- )
+method (unshift) ( list -- )
+method (insert) ( dest -- )
+method (each) ( xt -- ) ( me=obj -- )
+\ method (each-while) ( xt -- ) ( me=obj -- ? )
+method (clear) ( -- )
+
+: remove  ( obj -- )  [[ (remove) ]] ;
+: push  ( obj list -- )  swap [[ (push) ]] ;
+: unshift  ( obj list -- )  swap [[ (unshift) ]] ;
+: insert  ( obj dest -- )  swap [[ (insert) ]] ;
+: each>  ( obj -- <code> )  [[ r> (each) ]] ; DoNotSin
+\ : each-while>  ( obj -- <code> )  [[ r> (each-while) ]] ; DoNotSin
+: clear  ( obj -- )  [[ (clear) ]] ;
+
+\ ------------------------------------------------------------------------------
+
+%obj kind: %dlnode
+    var next var prev var first var last var parent
+;kind
+
+\ ------------------------------------------------------------------------------
+
+: dlremove  ( node -- )
+    dup -> parent @ dup 0= if  2drop  exit  then
+    locals| p n |
+    0 n -> parent !
+    p -> first @ p -> last @ = if
+        n p -> first @ = if
+            0 dup p -> first ! p -> last !
+        exit then
+        -1 abort" dlremove: Corrupt tree!"
+    else
+        n p -> first @ = if
+            0 n -> next @ -> prev !
+            n -> next @ p -> first !
+            0 dup n -> prev ! n -> next !
+        exit then
+        n p -> last @ = if
+            0 n -> prev @ -> next !
+            n -> prev @ p -> last !
+            0 dup n -> prev ! n -> next !
+        exit then
+        n -> next @ n -> prev @ -> next !
+        n -> prev @ n -> next @ -> prev !
+        0 dup n -> prev ! n -> next !
+    then ;
+
+: (dlinit)  ( node parent -- )
+    locals| p n |
+    n dup p -> first ! p -> last !
+    p n -> parent ! ;
+
+: dlpush  ( node parent -- )
+    over dlremove
+    dup -> first @ 0= if  (dlinit)  exit  then
+    locals| p n |
+    n p -> last @ -> next !
+    p -> last @ n -> prev !
+    n p -> last !
+    p n -> parent ! ;
+
+: dlinsert  ( node dest -- )
+    dup -> next @ 0= if  -> parent @ dlpush  exit  then
+    over dlremove
+    dup -> next @ locals| e d n |
+    n d -> next !
+    d n -> prev !
+    e n -> next !
+    n e -> prev !
+    d -> parent @ n -> parent ! ;
+
+: dlunshift  ( node parent -- )
+    over dlremove
+    dup -> first @ 0= if  (dlinit)  exit  then
+    locals| p n |
+    p -> first @ n -> next !
+    n p -> first @ -> prev ! 
+    n p -> first !
+    p n -> parent ! ;
+
+: dleach  ( xt node -- )
+    -> first @ [[  begin  me while
+        dup >r execute r>  next @ as
+    repeat
+    drop  ]] ;
+
+: (dlorphan)  0 dup next ! dup prev ! parent ! ;
+
+: dlclear  ( node -- )
+    [[ first @ [[  begin  me while
+        next @  (dlorphan)  as
+    repeat
+    ]] 0 dup first ! last ! ]] ;
+
+\ ------------------------------------------------------------------------------
+
+%dlnode m: (remove)  me dlremove ;
+%dlnode m: (push)  me swap dlpush ;
+%dlnode m: (unshift)  me swap dlunshift ;
+%dlnode m: (insert)  me swap dlinsert ;
+%dlnode m: (each)  me dleach ;
+%dlnode m: (clear)  me dlclear ;
+
+\ ------------------------------------------------------------------------------
+
+method draw ( -- )
+method step ( -- )
+method physics ( -- )
+method respond ( -- )  \ event handler
+
+\ ------------------------------------------------------------------------------
+
+%dlnode kind: %actor  \ basis for all visual objects (except maybe particles)
+    var en var x var y var z var w var h var d var vx var vy var vz 
+    var stp var drw var phy var rsp
+;kind
+
+%actor m: draw  drw @ ?dup if execute then ;
+%actor m: step  stp @ ?dup if execute then ;
+%actor m: physics  phy @ ?dup if execute then ;
+%actor m: respond  rsp @ ?dup if execute then ;
+
+: draw>  r> drw ! ;  DoNotSin
+: step>  r> stp ! ;  DoNotSin
+: physics>  r> phy ! ;  DoNotSin
+: respond>  r> rsp ! ;  DoNotSin
+
+\ ------------------------------------------------------------------------------
+
+: instance  ( kind - obj ) dup sizeof allocate throw swap over ! ;
+: instance,  ( kind - ) dup , sizeof cell- allot&erase ;
+
+\ ------------------------------------------------------------------------------
+
+method init ( -- )
+
+%obj m: init ;
+%dlnode m: init ;
+%actor m: init ;
+
+: static,  ( actor-kind - me=obj )
+    here as  instance,  at@f x fv!  en on  init ;
+
+: child,  ( actor-kind parent - me=obj )
+    swap static,  me swap push ;
+
+: child  ( actor-kind parent - obj )
+    swap instance [[ me swap push  at@f x fv!  en on  init  me ]] ;
+
+\ ------------------------------------------------------------------------------
+
+: ?execute  ?dup if execute then ;
+
+%actor m: draw  x v@ at  drw @ ?execute  me each>  en @ if  recurse  then ;
+%actor m: step  stp @ ?execute  me each>  en @ if  recurse  then ;
+%actor m: physics  phy @ ?execute  me each>  en @ if  recurse  then ;
+
+\ ------------------------------------------------------------------------------
+
+method (.me)
+
+: .name  >name count 16 min type space ;
+: .actor  me .name  x sf@ f. y sf@ f. ;
+: .me  kind @ .name  me . (.me) ;
+: .children  ( obj - )  each>  cr me . .name ;
+
+%obj m: (.me) ;
+%dlnode m: (.me)  ;
+%actor m: (.me) .actor ;
+
+\ ------------------------------------------------------------------------------
+
+\\
+
+: dlnode  create %dlnode instance, ;
+
+dlnode p1
+dlnode n1
+dlnode n2
+dlnode n3
+
+\ : hi  -> first @ begin ?dup while dup . -> next @ repeat ;
+: hi  each> me . ;
+
+n1 p1 dlpush
+n2 p1 dlpush
+n3 p1 dlpush
+
+\ n2 dlremove

@@ -1,5 +1,3 @@
-require plugins/obj1.vfx
-
 \ var tm-cols  \ scalar
 \ var tm-rows  \ scalar
 \ var tm-dcols  \ scalar
