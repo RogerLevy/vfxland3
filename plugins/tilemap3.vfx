@@ -1,0 +1,59 @@
+require plugins/obj2.vfx
+
+%actor kind: %tilemap
+    var tm-cols  \ scalar
+    var tm-rows  \ scalar
+    var tm-dcols  \ scalar
+    var tm-drows  \ scalar
+    var tm-base  \ addr
+    var tm-stride
+    var tm-scrollx  \ scalar
+    var tm-scrolly  \ scalar
+    var tm-tw  \ scalar
+    var tm-th  \ scalar
+    var tm-ts  \ addr
+;kind
+
+0 value dx
+0 value dy
+
+: the-tilemap  ( - )
+    tm-ts @ 0= if exit then
+    tm-base @ 0= if exit then 
+    tm-dcols v@ or 0= if exit then
+    1 al_hold_bitmap_drawing
+    
+    tm-scrollx s@ tm-tw s@ mod negate 
+    tm-scrolly s@ tm-th s@ mod negate  +at
+
+    tm-base @
+        tm-scrollx s@ tm-tw s@ / cells +
+        tm-scrolly s@ tm-th s@ / tm-stride @ * +
+    ( addr )
+    tm-drows s@ 0 do
+        at@ >r >r 
+        dup tm-dcols s@ cells bounds do
+            i @ tm-ts @ tile
+            tm-tw s@ 0 +at 
+        cell +loop
+        tm-stride @ +
+        r> r> tm-th s@ + at
+    loop 
+    drop
+  
+    0 al_hold_bitmap_drawing ;
+
+: (draw-tilemap)  draw> the-tilemap ;
+
+: /tilemap  ( a:base a:ts w h - )
+    tm-cols v!  tm-ts !  tm-base !
+    tm-ts @ @ bmpwh tm-tw v!
+    winw tm-tw s@ /  tm-cols s@ min
+    winh tm-th s@ /  tm-rows s@ min
+        tm-dcols v!
+    tm-cols s@ cells tm-stride !
+    0 0 tm-scrollx v!
+    (draw-tilemap) ;
+    
+: tileloc  ( col row tilemap - a )
+    [[ tm-stride @ * tm-base @ + swap cells + ]] ;

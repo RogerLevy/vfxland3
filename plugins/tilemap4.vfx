@@ -1,0 +1,182 @@
+require plugins/bitmaps2.vfx
+require plugins/obj2.vfx
+
+z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
+
+\ -----------------------------------------------------------------------------
+
+%actor kind: %tileset
+    var tb var tw var th 
+;kind
+
+\ -----------------------------------------------------------------------------
+
+: create-tileset  ( bmp tw th - <name> )
+    create %tileset static,  th ! tw ! tb ! 
+    0 0 at
+    tb @ bmph th @ / 0 do
+        at@
+        tb @ bmpw tw @ / 0 do
+            tb @ tw @ th @ subbmp ,
+        loop
+        th @ + at
+    loop ;
+    
+: tile  ( n tileset - )
+    over 0< if 2drop exit then
+    swap dup 28 rshift -rot $0fffffff and cells +
+    [ %tileset sizeof ] literal + @ mblit ;
+
+: tilew  -> tw @ ;
+: tileh  -> th @ ;
+
+\ -----------------------------------------------------------------------------
+
+%actor kind: %tilemap
+    var tm-base var tm-stride var tmx var tmy var ts
+;kind
+
+\ -----------------------------------------------------------------------------
+
+0 value (tw)
+0 value (th)
+
+: scrolled  ( - a )
+    ts @  dup tilew to (tw)  tileh to (th)
+    tmx s@ (tw) mod negate  tmy s@ (th) mod negate  +at 
+    tm-base @  tmx s@ (tw) / cells +  tmy s@ (th) / tm-stride @ * + ;
+
+: nextrow  ( a x y - a x y )  (th) + rot tm-stride @ + -rot ;
+
+\ -----------------------------------------------------------------------------
+
+ascii.bmp 8 8 create-tileset ascii.ts
+
+: #cols  w s@ (tw) /  tmx s@ (tw) mod if 1 + then ;
+: #rows  h s@ (th) /  tmy s@ (th) mod if 1 + then ;
+
+%tilemap m: init
+    0 0 tmx v!  \ default scroll
+    winw winh w v!  \ default size
+    here tm-base !  \ default base address
+    ascii.ts ts !  \ default tileset
+    winw 8 / cells tm-stride !  \ default stride
+    draw>
+        1 al_hold_bitmap_drawing
+        scrolled  #rows 0 do
+            at@ >r >r 
+            dup #cols cells bounds do
+                i @ ts @ tile  (tw) 0 +at
+            cell +loop
+            r> r> nextrow at
+        loop 
+        drop  0 al_hold_bitmap_drawing ;
+
+: tm-cols  w s@ ts @ -> tw @ / ;
+: tm-rows  h s@ ts @ -> th @ / ;
+
+\ -----------------------------------------------------------------------------    
+
+: /tilemap ( a ts #cols #rows - <name> )
+    rot ts !
+    ts @ tileh *  swap ts @ tilew *  swap w v!
+    tm-base !  tm-cols cells tm-stride ! ;
+
+\ -----------------------------------------------------------------------------    
+
+: count-tilemap  ( tilemap - a n )
+    [[ tm-base @  tm-stride @ tm-rows * cells ]] ;
+
+\ temporary
+: loc  ( col row tilemap - a )
+    [[ tm-stride @ * tm-base @ + swap cells + ]] ;
+    
+\ -----------------------------------------------------------------------------
+\ collisions
+
+require plugins/delta.vfx
+
+\ what sides the object collided
+0 value lwall?
+0 value rwall?
+0 value floor?
+0 value ceiling?
+
+1 constant BIT_CEL
+2 constant BIT_FLR
+4 constant BIT_WLT
+8 constant BIT_WRT
+
+\ -----------------------------------------------------------------------------
+
+module collisioning    
+
+    defer on-tilemap-collision ( tileval - )
+    ' drop is on-tilemap-collision
+
+    defer tile@props  ( tileval - bitmask )
+    : default-tile@props  0 >= ;
+    ' default-tile@props is tile@props
+
+    0 value map
+    0e fvalue gap
+    0e fvalue nx
+    0e fvalue ny
+    0 value t
+
+    : cel? BIT_CEL and ; \ ' ceiling '
+    : flr? BIT_FLR and ; \ ' floor '
+    : wlt? BIT_WLT and ; \ ' wall left '
+    : wrt? BIT_WRT and ; \ ' wall right '
+        
+    : px  x fs@ ;
+    : py  y fs@ ;
+    : mbw w fs@ ;
+    : mbh h fs@ ;
+
+    : xy>cr  ( f: x y - c r )  gap f/ f>s gap f/ f>s swap ;
+    : pt  ( f: x y - n )  xy>cr  map loc @ dup to t  tile@props ;          
+
+    ( increment coordinates )
+    : ve+  fswap  gap f+  px mbw f+ 1e f-  fmin  fswap ;
+    : he+  gap f+  mbh ny f+ 1e f-  fmin ;
+
+    : +vy  +to ny  ny py f- delta f/ vy fs! ;
+    : +vx  +to nx  nx px f- delta f/ vx fs! ;
+
+    ( push up/down )
+    : pu ( f:xy ) fnip gap fmod fnegate +vy
+        true to floor?  t on-tilemap-collision  ;
+    : pd ( f:xy ) fnip gap fmod fnegate gap f+ +vy
+        true to ceiling?  t on-tilemap-collision ;
+
+    ( check up/down )
+    : cu  mbw gap f/ f>s 2 + 0 do  f2dup pt cel? if pd unloop exit then ve+  loop f2drop ;
+    : cd  mbw gap f/ f>s 2 + 0 do  f2dup pt flr? if pu unloop exit then ve+  loop f2drop ;
+
+    ( push left/right )
+    : pl ( f:xy ) fdrop gap fmod fnegate +vx
+        true to rwall?  t on-tilemap-collision ;
+    : pr ( f:xy ) fdrop gap fmod fnegate gap f+ +vx
+        true to lwall?  t on-tilemap-collision ;
+
+    ( check left/right )
+    : cl  mbh gap f/ f>s 2 + 0 do  f2dup pt wrt? if pr unloop exit then he+  loop f2drop ;
+    : crt mbh gap f/ f>s 2 + 0 do  f2dup pt wlt? if pl unloop exit then he+  loop f2drop ;
+
+    : ud  vy fs@ f0<> if  vy fs@ f0< if  px ny cu  else  px ny mbh f+ cd  then then ;
+    : lr  vx fs@ f0<> if  vx fs@ f0< if  nx ny cl  else  nx mbw f+ ny crt  then then ;
+
+    : init  ( - )
+        px vx fs@ delta f* f+ to nx  py vy fs@ delta f* f+ to ny 
+        0 to lwall?  0 to rwall?  0 to floor?  0 to ceiling?
+        map [[ ts @ tilew s>f to gap ]] ;
+
+    : collide-tilemap  ( tilemap - )
+        to map  init ud lr ;
+
+    export collide-tilemap
+    export on-tilemap-collision
+    export tile@props
+    
+end-module
