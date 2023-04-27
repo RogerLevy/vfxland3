@@ -1,0 +1,44 @@
+require plugins/obj2.vfx
+require plugins/delta.vfx
+
+\ ------------------------------------------------------------------------------
+
+%actor kind: %scene
+    : (scene-clear)  me each> free drop ;
+    %scene m: (clear)  (scene-clear)  me dlclear ;
+;kind
+
+\ ------------------------------------------------------------------------------
+
+0 0 at
+create root  %scene static,
+
+\ ------------------------------------------------------------------------------
+
+create alevt /ALLEGRO_EVENT allot&erase
+
+: handle-events
+    begin  queue alevt al_get_next_event  while
+        \ alevt ALLEGRO_EVENT.type @ ALLEGRO_EVENT_MOUSE_BUTTON_DOWN = if
+        \ then 
+    repeat ;
+
+: >display
+    reset-keyboard 
+    display al_get_win_window_handle SetForegroundWindow drop
+    identity 0e 0e 0e 2e 2e transformed
+    !delta ;
+
+: >vfx
+    mswin? if
+        vfx-hwnd SetForegroundWindow drop
+    then ;
+
+\ ------------------------------------------------------------------------------
+
+: poll  poll-keyboard poll-mouse ;
+: advance  [[ step  physics ]] ;
+: render  [[ draw ]] ;
+: present  display al_flip_display ;
+: frame  poll  handle-events  root advance  root render  present ;
+: go  >display  begin !delta  frame  pause  <escape> pressed? until  >vfx ;
