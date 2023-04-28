@@ -133,6 +133,11 @@ method (clear) ( -- )
 
 \ ------------------------------------------------------------------------------
 
+: >first  -> first @ ;
+: >next  -> next @ ;
+
+\ ------------------------------------------------------------------------------
+
 %dlnode m: (remove)  me dlremove ;
 %dlnode m: (push)  me swap dlpush ;
 %dlnode m: (unshift)  me swap dlunshift ;
