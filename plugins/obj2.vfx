@@ -20,7 +20,7 @@ variable >os
 : ?have  >in @  have abort" Method already defined!" >in ! ;
 : method  ?have /kind cell field to /kind does> @ kind @ + @ ?execute ;
 : metafield  /kind swap field to /kind does> @ + ;
-: kind:  create  here dup >r  1024 move 1024 allot  r> ;
+: kind:  create  dup here dup >r  1024 move 1024 allot  r@ cell+ !  r> ;
 : ;kind  drop ;
 : m:  ( kind -- <method> <code> ; )  ' >body @ + :noname swap ! ;
 : sizeof  @ ;
@@ -29,8 +29,9 @@ variable >os
 
 \ ------------------------------------------------------------------------------
 
-cell metafield (size)
-create %obj  4 , 1020 allot&erase
+cell metafield kind.size
+cell metafield kind.super
+create %obj  8 , 1016 allot&erase
 
 \ ------------------------------------------------------------------------------
 
@@ -165,25 +166,28 @@ method respond ( -- )  \ event handler
 
 \ ------------------------------------------------------------------------------
 
-: instance  ( kind - obj ) dup sizeof allocate throw swap over ! ;
-: instance,  ( kind - ) dup , sizeof cell- allot&erase ;
+defer alloc
+
+: heap  ['] allocate is alloc ;
+: allotment  here swap allot&erase 0 ;
+: static  ['] allotment is alloc ;
+static
 
 \ ------------------------------------------------------------------------------
 
-method init ( -- )
+0 value joan
+: ?child  joan if  me joan push  then ;
 
+\ ------------------------------------------------------------------------------
+
+method init ( - )
 %obj m: init ;
 %dlnode m: init ;
-%actor m: init ;
+%actor m: init  at@f x fv!  en on  ?child ;
 
-: static,  ( actor-kind - me=obj )
-    here as  instance,  at@f x fv!  en on  init ;
-
-: child,  ( actor-kind parent - me=obj )
-    swap static,  me swap push ;
-
-: child  ( actor-kind parent - obj )
-    swap instance [[ me swap push  at@f x fv!  en on  init  me ]] ;
+: supers  kind @ begin  kind.super @ ?dup while dup -> init @ execute repeat ;
+: **  dup sizeof  alloc throw [[ kind !  supers init  me ]] ;
+: static,  static ** as ;
 
 \ ------------------------------------------------------------------------------
 
@@ -198,9 +202,9 @@ method init ( -- )
 method (.me)
 
 : .name  >name count 16 min type space ;
-: .actor  me .name  x sf@ f. y sf@ f. ;
+: .actor  me . me .name  x sf@ f. y sf@ f. ;
 : .me  kind @ .name  me . (.me) ;
-: .children  ( obj - )  each>  cr me . .name ;
+: .children  ( obj - )  each>  cr me . me .name ;
 
 %obj m: (.me) ;
 %dlnode m: (.me)  ;
@@ -210,7 +214,7 @@ method (.me)
 
 \\
 
-: dlnode  create %dlnode instance, ;
+: dlnode  create %dlnode static drop ;
 
 dlnode p1
 dlnode n1

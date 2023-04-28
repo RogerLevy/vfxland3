@@ -77,15 +77,15 @@ ascii.bmp 8 8 create-tileset ascii.ts
 
 \ -----------------------------------------------------------------------------    
 
-: /tilemap ( a ts #cols #rows - <name> )
-    rot ts !
+: *tilemap ( a ts #cols #rows - tilemap )
+    %tilemap ** [[  rot ts !
     ts @ tileh *  swap ts @ tilew *  swap w v!
-    tm-base !  tm-cols cells tm-stride ! ;
+    tm-base !  tm-cols cells tm-stride !  me ]] ;
 
 \ -----------------------------------------------------------------------------    
 
 : count-tilemap  ( tilemap - a n )
-    [[ tm-base @  tm-stride @ tm-rows * cells ]] ;
+    [[ tm-base @  tm-stride @ tm-rows * ]] ;
 
 \ temporary
 : loc  ( col row tilemap - a )
