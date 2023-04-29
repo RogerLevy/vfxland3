@@ -20,7 +20,10 @@ variable >os
 : ?have  >in @  have abort" Method already defined!" >in ! ;
 : method  ?have /kind cell field to /kind does> @ kind @ + @ ?execute ;
 : metafield  /kind swap field to /kind does> @ + ;
-: kind:  create  dup here dup >r  1024 move 1024 allot  r@ cell+ !  r> ;
+: kind:
+    ( super ) dup
+    >in @  have if  >in !  ' >body  else  >in !  create  here  then
+        dup >r  1024 move 1024 allot  r@ cell+ !  r> ;
 : ;kind  drop ;
 : m:  ( kind -- <method> <code> ; )  ' >body @ + :noname swap ! ;
 : sizeof  @ ;
