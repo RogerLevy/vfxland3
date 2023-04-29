@@ -22,10 +22,12 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
         th @ + at
     loop ;
     
-: tile  ( n tileset - )
-    over 0< if 2drop exit then
+: tile@  ( n tileset - bmp flags )    
     swap dup 28 rshift -rot $0fffffff and cells +
-    [ %tileset sizeof ] literal + @ mblit ;
+    [ %tileset sizeof ] literal + @ ;
+    
+: tile  ( n tileset - )
+    over 0< if 2drop exit then  tile@ mblit ;
 
 : tilew  -> tw @ ;
 : tileh  -> th @ ;
