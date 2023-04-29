@@ -202,8 +202,9 @@ method init ( - )
 %actor m: init  at@f x fv!  en on  ?child ;
 
 : supers  kind @ begin  kind.super @ ?dup while dup -> init @ execute repeat ;
-: **  dup sizeof  alloc throw [[ kind !  supers init  me ]] ;
-: static,  static ** as ;
+: (init)  kind !  supers init  ;
+: **  dup sizeof  alloc throw [[ (init) me ]] ;
+: static,  here over sizeof allot&erase  as  (init) ;
 
 \ ------------------------------------------------------------------------------
 
@@ -218,7 +219,7 @@ method init ( - )
 method (.me)
 
 : .name  >name count 16 min type space ;
-: .actor  me . me .name  x sf@ f. y sf@ f. ;
+: .actor  me .name  x sf@ f. y sf@ f. ;
 : .me  kind @ .name  me . (.me) ;
 
 %obj m: (.me) ;
