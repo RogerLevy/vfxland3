@@ -212,11 +212,13 @@ method (.me)
 : .name  >name count 16 min type space ;
 : .actor  me . me .name  x sf@ f. y sf@ f. ;
 : .me  kind @ .name  me . (.me) ;
-: .children  ( obj - )  each>  cr me . me .name ;
 
 %obj m: (.me) ;
 %dlnode m: (.me)  ;
 %actor m: (.me) .actor ;
+
+: peek  [[ .me ]] ;
+: .children  ( obj - )  each>  cr me . me .name ;
 
 \ ------------------------------------------------------------------------------
 
