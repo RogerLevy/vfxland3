@@ -197,6 +197,7 @@ static
 
 0 value joan
 : ?child  joan if  me joan push  then ;
+: in  to joan ;
 
 \ ------------------------------------------------------------------------------
 
