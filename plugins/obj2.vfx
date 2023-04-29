@@ -35,6 +35,10 @@ create %obj  4 , 1016 allot&erase
 
 \ ------------------------------------------------------------------------------
 
+: require  me [[ require ]] ;
+: include  me [[ include ]] ;
+: included  me [[ included ]] ;
+
 : kind:
     ( super ) dup
     >in @  have if  >in !  ' >body  else  >in !  create  here  then
