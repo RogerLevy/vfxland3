@@ -11,7 +11,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
 
 \ -----------------------------------------------------------------------------
 
-: create-tileset  ( bmp tw th - <name> )
+: tileset  ( bmp tw th - <name> )
     create %tileset static,  th ! tw ! tb ! 
     0 0 at
     tb @ bmph th @ / 0 do
@@ -50,7 +50,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
 
 \ -----------------------------------------------------------------------------
 
-ascii.bmp 8 8 create-tileset ascii.ts
+ascii.bmp 8 8 tileset ascii.ts
 
 : #cols  w s@ (tw) /  tmx s@ (tw) mod if 1 + then ;
 : #rows  h s@ (th) /  tmy s@ (th) mod if 1 + then ;
