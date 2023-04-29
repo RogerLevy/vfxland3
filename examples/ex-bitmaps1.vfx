@@ -4,7 +4,7 @@ cr
 include config/options.vfx
 include config/allegro.vfx
 include lib/vl3/vfxland3.vfx
-include lib/vl3/plugins/bitmaps1.vfx
+include plugins/bitmaps1.vfx
 
 0.5e 0.25e 0e 1e al_clear_to_color
 
