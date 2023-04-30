@@ -59,9 +59,9 @@ method (each) ( xt -- ) ( me=obj -- )
 method (clear) ( -- )
 
 : remove  ( obj -- )  [[ (remove) ]] ;
-: push  ( obj list -- )  swap [[ (push) ]] ;
-: unshift  ( obj list -- )  swap [[ (unshift) ]] ;
-: insert  ( obj dest -- )  swap [[ (insert) ]] ;
+: push  ( v list -- )  [[ (push) ]] ;
+: unshift  ( v list -- )  [[ (unshift) ]] ;
+: insert  ( v dest -- )  [[ (insert) ]] ;
 : each>  ( obj -- <code> )  [[ r> (each) ]] ; DoNotSin
 \ : each-while>  ( obj -- <code> )  [[ r> (each-while) ]] ; DoNotSin
 : clear  ( obj -- )  [[ (clear) ]] ;
@@ -154,9 +154,9 @@ method (clear) ( -- )
 \ ------------------------------------------------------------------------------
 
 %dlnode m: (remove)  me dlremove ;
-%dlnode m: (push)  me swap dlpush ;
-%dlnode m: (unshift)  me swap dlunshift ;
-%dlnode m: (insert)  me swap dlinsert ;
+%dlnode m: (push)  me dlpush ;
+%dlnode m: (unshift)  me dlunshift ;
+%dlnode m: (insert)  me dlinsert ;
 %dlnode m: (each)  me dleach ;
 %dlnode m: (clear)  me dlclear ;
 
