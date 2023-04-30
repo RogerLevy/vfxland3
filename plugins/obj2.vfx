@@ -195,6 +195,16 @@ static
 
 \ ------------------------------------------------------------------------------
 
+: kill  -> en off ;
+: sweep   
+    -> first @ [[  begin  me while
+        next @ >r
+            en @ 0= if  me recurse  me free drop  me remove  then
+        r> as
+    repeat ]] ;
+
+\ ------------------------------------------------------------------------------
+
 0 value joan
 : ?child  joan if  me joan push  then ;
 : in  to joan ;

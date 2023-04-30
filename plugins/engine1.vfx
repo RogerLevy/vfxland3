@@ -37,7 +37,7 @@ create alevt /ALLEGRO_EVENT allot&erase
 \ ------------------------------------------------------------------------------
 
 : poll  poll-keyboard poll-mouse ;
-: advance  [[ step  physics ]] ;
+: advance  [[ step  physics  me sweep ]] ;
 : render  [[ draw ]] ;
 : present  display al_flip_display ;
 : frame  poll  handle-events  root advance  root render  present ;
