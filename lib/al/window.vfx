@@ -90,6 +90,6 @@ mswin? [if]
 
 init-allegro
 
-mswin? [if]
-    vfx-hwnd SetForegroundWindow drop
+mswin? dev? and [if]
+    \ vfx-hwnd SetForegroundWindow drop
 [then]
