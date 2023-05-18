@@ -214,6 +214,7 @@ method init ( - )
 : supers  kind @ begin  kind.super @ ?dup while dup -> init @ execute repeat ;
 : (init)  kind !  supers init  ;
 : **  dup sizeof  alloc throw [[ (init) me ]] ;
+: one  dup sizeof  alloc throw [[ (init) me ]] ;
 : static,  here over sizeof allot&erase  as  (init) ;
 
 \ ------------------------------------------------------------------------------
