@@ -211,9 +211,9 @@ method init ( - )
 %dlnode m: init ;
 %actor m: init  at@f x fv!  en on  ?child ;
 
-: supers  kind @ begin  kind.super @ ?dup while dup -> init @ execute repeat ;
-: (init)  kind !  supers init  ;
-: **  dup sizeof  alloc throw [[ (init) me ]] ;
+: supers  0 locals| n |  kind @ begin  kind.super @ ?dup while
+    dup -> init @ swap  1 +to n  repeat  n 0 ?do  execute  loop ;
+: (init)  kind !  supers  init ;
 : one  dup sizeof  alloc throw [[ (init) me ]] ;
 : static,  here over sizeof allot&erase  as  (init) ;
 
