@@ -174,11 +174,6 @@ method respond ( -- )  \ event handler
     var stp var drw var phy var rsp
 ;kind
 
-%actor m: draw  drw @ ?dup if execute then ;
-%actor m: step  stp @ ?dup if execute then ;
-%actor m: physics  phy @ ?dup if execute then ;
-%actor m: respond  rsp @ ?dup if execute then ;
-
 : draw>  r> drw ! ;  DoNotSin
 : step>  r> stp ! ;  DoNotSin
 : physics>  r> phy ! ;  DoNotSin

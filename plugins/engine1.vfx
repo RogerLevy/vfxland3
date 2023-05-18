@@ -26,10 +26,8 @@ create alevt /ALLEGRO_EVENT allot&erase
         then
     repeat ;
 
-extern "C" BOOL BringWindowToTop( void * hWnd );
-
 : >display
-    flushOP-gen  \ VFX flush buffered output
+    flushOP-gen drop \ VFX flush buffered output
     reset-keyboard 
     display al_get_win_window_handle SetForegroundWindow drop
     identity 0e 0e 0e 2e 2e transformed
