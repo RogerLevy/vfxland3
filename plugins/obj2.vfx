@@ -219,11 +219,21 @@ method init ( - )
 
 \ ------------------------------------------------------------------------------
 
+: ?draw  en @ if  draw  then ;
+: ?draw-children
+    first @ 0= if exit then
+    x fv@ m al_translate_transform  m al_use_transform 
+    ['] ?draw (each)
+    x fs@ fnegate y fs@ fnegate m al_translate_transform  m al_use_transform ;
+
+\ ------------------------------------------------------------------------------
+
 : ?execute  ?dup if execute then ;
 
-%actor m: draw  x v@ at  drw @ ?execute  me each>  en @ if  recurse  then ;
+%actor m: draw  x v@ at  drw @ ?execute  ?draw-children ;
 %actor m: step  stp @ ?execute  me each>  en @ if  recurse  then ;
 %actor m: physics  phy @ ?execute  me each>  en @ if  recurse  then ;
+%actor m: respond  rsp @ ?dup if execute then ;
 
 \ ------------------------------------------------------------------------------
 
