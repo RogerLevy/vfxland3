@@ -232,9 +232,9 @@ method init ( - )
 : ?execute  ?dup if execute then ;
 
 %actor m: draw  x v@ at  drw @ ?execute  ?draw-children ;
-%actor m: step  stp @ ?execute  me each>  en @ if  recurse  then ;
-%actor m: physics  phy @ ?execute  me each>  en @ if  recurse  then ;
-%actor m: respond  rsp @ ?dup if execute then ;
+%actor m: step  stp @ ?execute  me each>  en @ if  step  then ;
+%actor m: physics  phy @ ?execute  me each>  en @ if  physics  then ;
+%actor m: respond  rsp @ ?execute  me each>  en @ if  respond  then ;
 
 \ ------------------------------------------------------------------------------
 
