@@ -65,6 +65,7 @@ method (clear) ( -- )
 : each>  ( obj -- <code> )  [[ r> (each) ]] ; DoNotSin
 \ : each-while>  ( obj -- <code> )  [[ r> (each-while) ]] ; DoNotSin
 : clear  ( obj -- )  [[ (clear) ]] ;
+: each  ( xt obj -- ) [[ (each) ]] ;
 
 \ ------------------------------------------------------------------------------
 
