@@ -3245,7 +3245,7 @@ extern "C" void al_set_mouse_xy( void * display, int x, int y );
 \ extern "C" al_set_new_bitmap_flags( );
 \ extern "C" al_set_new_bitmap_format( );
 \ extern "C" al_set_new_bitmap_samples( );
-\ extern "C" al_set_new_display_adapter( );
+extern "C" void al_set_new_display_adapter( int adapter );
 extern "C" void al_set_new_display_flags( int flags );
 extern "C" void al_set_new_display_option( int option, int value, int importance );
 \ extern "C" al_set_new_display_refresh_rate( );
