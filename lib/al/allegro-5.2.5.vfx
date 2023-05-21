@@ -3827,6 +3827,11 @@ struct /ALLEGRO_EVENT
     end-union
 end-struct
 
+\ didn't realize; if the struct isn't fully defined getting an event
+\ would corrupt the dictionary.  temporary workaround: give it a generous fixed size.
+
+2048 constant /ALLEGRO_EVENT
+
 struct /ALLEGRO_MOUSE_STATE
     field: ALLEGRO_MOUSE_STATE.x
     field: ALLEGRO_MOUSE_STATE.y
