@@ -18,9 +18,11 @@ variable >os
 : kind  me ;
 : ?execute  ?dup 0= abort" Unimplemented method!" execute ;
 : ?have  >in @  have abort" Method already defined!" >in ! ;
-: method  ?have /kind cell field to /kind does> @ kind @ + @ ?execute ;
+: do-method  @ kind @ + @ ?execute ;
+: method  ?have /kind cell field to /kind $C0FFEE , does> do-method ;
 : metafield  /kind swap field to /kind does> @ + ;
-: m:  ( kind -- <method> <code> ; )  ' >body @ + :noname swap ! ;
+: ?method  >in @  ' >body cell+ @ $C0FFEE <> abort" Not a method."  >in ! ;
+: m:  ( kind -- <method> <code> ; )  ?method  ' >body @ + :noname swap ! ;
 : sizeof  @ ;
 : ?literal  state @ if postpone literal then ;
 : ->  ' >body @ ?literal s" +" evaluate ; immediate
@@ -39,13 +41,13 @@ create %obj  4 , 1016 allot&erase
 : include  me [[ include ]] ;
 : included  me [[ included ]] ;
 
-: kind:
+: kind:  ( -- <name> kind )
     ( super ) dup
     >in @  have if  >in !  ' >body  else  >in !  create  here  then
         dup >r  1024 move 1024 allot  r@ cell+ !
         CurrSourceName r@ kind.source place
         r> ;
-: ;kind  drop ;
+: ;kind  ( kind -- ) drop ;
 : update  kind.source count included ;
 
 \ ------------------------------------------------------------------------------
