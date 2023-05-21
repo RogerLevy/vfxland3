@@ -2688,7 +2688,7 @@ extern "C" void al_draw_multiline_text( void *font,
 \ extern "C" al_draw_polygon( );
 \ extern "C" al_draw_polyline( );
 \ extern "C" al_draw_prim( );
-extern "C" void al_draw_rectangle( float x1, float y1, float x2, float y2, float r, float g, float b, float a, float thickness );
+extern "C" void al_draw_rectangle( float x1, float y1, float x2, float y2, float r, float g, float b, float a, int float-thickness );
 \ extern "C" al_draw_ribbon( );
 extern "C" void al_draw_rotated_bitmap( void *bitmap, float cx, float cy, float dx, float dy, float angle, int flags );
 \ extern "C" al_draw_rounded_rectangle( );
