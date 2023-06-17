@@ -1,0 +1,19 @@
+: ?null  ?dup 0= if  pop 2drop  exit then ;
+: mblit  ( m bmp - )  ?null  at@f swap al_draw_bitmap ;
+: blit  ( bmp - )  0 swap mblit ;
+: bmpw  ( bmp - n )  al_get_bitmap_width ;
+: bmph  ( bmp - n )  al_get_bitmap_height ;
+: bmpwh  ( bmp - w h )  dup bmpw swap bmph ; 
+: loadbmp  ( zstr - )  al_load_bitmap ;
+: subbmp  ( bmp w h - bmp )  2>r at@ 2r@ al_create_sub_bitmap 2r> drop 0 +at ;
+: hold  al_hold_bitmap_drawing ;
+: -bmp  al_destroy_bitmap ;
+
+\ ------------------------------------------------------------------------------
+
+: bcopy  ( src dest - )
+    al_set_target_bitmap
+    ALLEGRO_ADD ALLEGRO_ONE ALLEGRO_ZERO al_set_blender
+    ( bmp ) at@f 0 al_draw_bitmap
+    ALLEGRO_ADD ALLEGRO_ALPHA ALLEGRO_INVERSE_ALPHA al_set_blender
+    al_get_backbuffer al_set_target_bitmap ;

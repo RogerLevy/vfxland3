@@ -2810,7 +2810,7 @@ extern "C" void al_flush_event_queue( void * queue );
 \ extern "C" al_get_audio_stream_position_secs( );
 \ extern "C" al_get_audio_stream_speed( );
 \ extern "C" al_get_available_audio_stream_fragments( );
-\ extern "C" al_get_backbuffer( );
+extern "C" void * al_get_backbuffer( );
 \ extern "C" al_get_bitmap_depth( );
 \ extern "C" al_get_bitmap_flags( );
 \ extern "C" al_get_bitmap_format( );
