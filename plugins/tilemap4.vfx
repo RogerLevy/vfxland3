@@ -11,7 +11,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
 
 \ -----------------------------------------------------------------------------
 
-: tileset  ( bmp tw th - <name> )
+: create-tileset  ( bmp tw th - <name> )
     %tileset create-static  th ! tw ! tb ! 
     0 0 at
     tb @ bmph th @ / 0 do
@@ -22,7 +22,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
         th @ + at
     loop ;
     
-: tile@  ( n tileset - bmp flags )    
+: tile@  ( n tileset - flags bmp )    
     swap dup 28 rshift -rot $0fffffff and cells +
     [ %tileset sizeof ] literal + @ ;
     
@@ -52,7 +52,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
 
 \ -----------------------------------------------------------------------------
 
-ascii.bmp 8 8 tileset ascii.ts
+ascii.bmp 8 8 create-tileset ascii.ts
 
 : #cols  w s@ (tw) /  tmx s@ (tw) mod if 1 + then ;
 : #rows  h s@ (th) /  tmy s@ (th) mod if 1 + then ;
