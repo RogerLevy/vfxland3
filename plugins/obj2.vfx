@@ -213,9 +213,9 @@ method init ( - )
 
 : supers  0 locals| n |  kind @ begin  kind.super @ ?dup while
     dup -> init @ swap  1 +to n  repeat  n 0 ?do  execute  loop ;
-: (init)  kind !  supers  init ;
+: (init)  ( kind - )  kind !  supers  init ;
 : one  dup sizeof  alloc throw [[ (init) me ]] ;
-: static,  here over sizeof allot&erase  as  (init) ;
+: create-static  create  here as  dup sizeof allot&erase  (init) ;
 
 \ ------------------------------------------------------------------------------
 
