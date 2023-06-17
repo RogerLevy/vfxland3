@@ -12,7 +12,7 @@ z" plugins/assets/ascii_8x8.png" loadbmp constant ascii.bmp
 \ -----------------------------------------------------------------------------
 
 : tileset  ( bmp tw th - <name> )
-    create %tileset static,  th ! tw ! tb ! 
+    %tileset create-static  th ! tw ! tb ! 
     0 0 at
     tb @ bmph th @ / 0 do
         at@
@@ -60,7 +60,7 @@ ascii.bmp 8 8 tileset ascii.ts
 %tilemap m: init
     0 0 tmx v!  \ default scroll
     winw winh w v!  \ default size
-    here tm-base !  \ default base address
+    align here tm-base !  \ default base address
     ascii.ts ts !  \ default tileset
     winw 8 / cells tm-stride !  \ default stride
     draw>
@@ -79,10 +79,10 @@ ascii.bmp 8 8 tileset ascii.ts
 
 \ -----------------------------------------------------------------------------    
 
-: *tilemap ( a ts #cols #rows - tilemap )
+: *tilemap ( ts #cols #rows - tilemap )
     %tilemap one [[  rot ts !
     ts @ tileh *  swap ts @ tilew *  swap w v!
-    tm-base !  tm-cols cells tm-stride !  me ]] ;
+    tm-cols cells tm-stride !  me ]] ;
 
 \ -----------------------------------------------------------------------------    
 
